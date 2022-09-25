@@ -26,11 +26,11 @@ new p5((p5Instance) => {
   /** 最小速度（画面の高さを1として、1フレームごとに動く量の最小値） */
   const MINSPEED = 0.005;
   /** 最大速度（画面の高さを1として、1フレームごとに動く量の最大値） */
-  const MAXSPEED = 0.02;
+  const MAXSPEED = 0.03;
   /** カーソル移動後、その位置からバブルを出し続ける時間（フレーム） */
   const MOUSE_ACTIVE_FRAMES = 120;
   /** 背景色 */
-  const BG_COLOR = "#171d21";
+  const BG_COLOR = "#0e1d38";
   /** バブルの色 */
   const BUBBLE_COLOR = "#77acb5";
   /** 生成したバブルを格納する配列 */
@@ -95,7 +95,7 @@ new p5((p5Instance) => {
 
   /** 初期化処理 */
   p.setup = () => {
-    p.createCanvas(p.windowWidth, p.windowHeight);
+    p.createCanvas(500, 500);
   };
 
   /** フレームごとの描画処理 */
