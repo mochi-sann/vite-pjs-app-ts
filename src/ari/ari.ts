@@ -1,6 +1,7 @@
 import p5 from "p5";
 
 import "./ari.css";
+import { newDirection } from "./util";
 // これを参考に作りたい
 console.log("this is ari");
 const SquereColor = (state: number): string => {
@@ -11,14 +12,8 @@ const generate2DArray2 = (m: number, n: number, val = 0) => {
   return [...Array(m)].map((_) => Array(n).fill(val));
 };
 type PostionType = { x: number; y: number; directions: number };
-/**
- * 新しい蟻のPositionを返す
- * @module newPostion
- * @param  {PostionType} pos  今現在のポジションを入力する
- * @param {-1 | 1 } newDireaction  これから進む方向を入れる -1 左 1 右
- * **/
-const newPostion = (pos: PostionType, newDireaction: -1 | 1): PostionType => {
-  const Direction = Math.abs((pos.directions + newDireaction) % 4);
+const newPostion = (pos: PostionType, newDireaction: number): PostionType => {
+  const Direction = newDirection(pos.directions, newDireaction);
   const xPos =
     Direction === 0 ? pos.x + 1 : Direction === 2 ? pos.x - 1 : pos.x;
   const yPos =
@@ -74,9 +69,11 @@ new p5((p5Instance) => {
   p.draw = () => {
     Position = Position.map((pos) => {
       if (world[pos.y][pos.x] === 1) {
+        // 黒
         world[pos.y][pos.x] = 0;
         return newPostion(pos, -1);
       } else {
+        //白
         world[pos.y][pos.x] = 1;
         return newPostion(pos, 1);
       }
@@ -88,9 +85,9 @@ new p5((p5Instance) => {
         // p.fill(p.color(SquereColor(0)));
       });
     });
-    Position = Position.map((pos) => {
-      console.log({ pos });
-      return { x: pos.x + 1, y: pos.y, directions: pos.directions };
-    });
+    // Position = Position.map((pos) => {
+    //   console.log({ pos });
+    //   return { x: pos.x + 1, y: pos.y, directions: pos.directions };
+    // });
   };
 }, document.getElementById("app")!);
