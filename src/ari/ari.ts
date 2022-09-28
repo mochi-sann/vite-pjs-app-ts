@@ -1,7 +1,7 @@
 import p5 from "p5";
 
 import "./ari.css";
-import { newDirection } from "./util";
+import { newPostion } from "./NewPos";
 // これを参考に作りたい
 console.log("this is ari");
 const SquereColor = (state: number): string => {
@@ -11,15 +11,7 @@ const SquereColor = (state: number): string => {
 const generate2DArray2 = (m: number, n: number, val = 0) => {
   return [...Array(m)].map((_) => Array(n).fill(val));
 };
-type PostionType = { x: number; y: number; directions: number };
-const newPostion = (pos: PostionType, newDireaction: number): PostionType => {
-  const Direction = newDirection(pos.directions, newDireaction);
-  const xPos =
-    Direction === 0 ? pos.x + 1 : Direction === 2 ? pos.x - 1 : pos.x;
-  const yPos =
-    Direction === 1 ? pos.y + 1 : Direction === 3 ? pos.y - 1 : pos.x;
-  return { x: xPos, y: yPos, directions: Direction };
-};
+export type PostionType = { x: number; y: number; directions: number };
 /**
  * ルール
  *  白いマスにアリがいた場合、90°右に方向転換し、そのマスの色を反転させ、1マス前進する。
@@ -68,6 +60,7 @@ new p5((p5Instance) => {
   /** フレームごとの描画処理 */
   p.draw = () => {
     Position = Position.map((pos) => {
+      console.log(pos, world[pos.y][pos.x]);
       if (world[pos.y][pos.x] === 1) {
         // 黒
         world[pos.y][pos.x] = 0;
