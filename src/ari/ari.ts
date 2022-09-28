@@ -3,7 +3,6 @@ import p5 from "p5";
 import "./ari.css";
 import { newPostion } from "./NewPos";
 // これを参考に作りたい
-console.log("this is ari");
 const SquereColor = (state: number): string => {
   return state === 0 ? "#ffffff" : state === 2 ? "#ff0000" : "#000000";
 };
@@ -21,21 +20,21 @@ new p5((p5Instance) => {
   const p = p5Instance as unknown as p5;
   // ワールドの四角の数
   const WORLD_SIZE: { height: number; width: number } = {
-    height: 200,
-    width: 200,
+    height: 100,
+    width: 100,
   };
   /*
    * directions :  0↑ 1→ 2↓ 3←
    * */
   let Position: PostionType[] = [
     {
-      x: 100,
-      y: 100,
+      x: 50,
+      y: 50,
       directions: 0,
     },
   ];
 
-  const SquereSize: number = 3;
+  const SquereSize: number = 6;
 
   let world: number[][] = generate2DArray2(
     WORLD_SIZE.width,
@@ -60,7 +59,7 @@ new p5((p5Instance) => {
   /** フレームごとの描画処理 */
   p.draw = () => {
     Position = Position.map((pos) => {
-      console.log(pos, world[pos.y][pos.x]);
+      // console.log(pos, world[pos.y][pos.x]);
       if (world[pos.y][pos.x] === 1) {
         // 黒
         world[pos.y][pos.x] = 0;
@@ -71,6 +70,7 @@ new p5((p5Instance) => {
         return newPostion(pos, 1);
       }
     });
+
     world.map((value, h) => {
       value.map((state, w) => {
         p.fill(p.color(SquereColor(state)));
