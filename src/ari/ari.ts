@@ -10,6 +10,21 @@ const SquereColor = (state: number): string => {
 const generate2DArray2 = (m: number, n: number, val = 0) => {
   return [...Array(m)].map((_) => Array(n).fill(val));
 };
+type PostionType = { x: number; y: number; directions: number };
+/**
+ * 新しい蟻のPositionを返す
+ * @module newPostion
+ * @param  {PostionType} pos  今現在のポジションを入力する
+ * @param {-1 | 1 } newDireaction  これから進む方向を入れる -1 左 1 右
+ * **/
+const newPostion = (pos: PostionType, newDireaction: -1 | 1): PostionType => {
+  const Direction = Math.abs((pos.directions + newDireaction) % 4);
+  const xPos =
+    Direction === 0 ? pos.x + 1 : Direction === 2 ? pos.x - 1 : pos.x;
+  const yPos =
+    Direction === 1 ? pos.y + 1 : Direction === 3 ? pos.y - 1 : pos.x;
+  return { x: xPos, y: yPos, directions: Direction };
+};
 /**
  * ルール
  *  白いマスにアリがいた場合、90°右に方向転換し、そのマスの色を反転させ、1マス前進する。
@@ -25,10 +40,10 @@ new p5((p5Instance) => {
   /*
    * directions :  0↑ 1→ 2↓ 3←
    * */
-  let Position: { x: number; y: number; directions: number }[] = [
+  let Position: PostionType[] = [
     {
-      x: 2,
-      y: 2,
+      x: 100,
+      y: 100,
       directions: 0,
     },
   ];
@@ -48,17 +63,23 @@ new p5((p5Instance) => {
     );
     // startPosition.map((pos) => {
     // world.[pos.y][pos.x] = 2;})
-    Position.map((pos) => {
-      world[pos.y][pos.x] = 2;
-    });
+    // Position.map((pos) => {
+    //   world[pos.y][pos.x] = 2;
+    // });
     p.noStroke();
     p.background(220);
   };
 
   /** フレームごとの描画処理 */
   p.draw = () => {
-    Position.map((pos) => {
-      world[pos.y][pos.x] = 2;
+    Position = Position.map((pos) => {
+      if (world[pos.y][pos.x] === 1) {
+        world[pos.y][pos.x] = 0;
+        return newPostion(pos, -1);
+      } else {
+        world[pos.y][pos.x] = 1;
+        return newPostion(pos, 1);
+      }
     });
     world.map((value, h) => {
       value.map((state, w) => {
