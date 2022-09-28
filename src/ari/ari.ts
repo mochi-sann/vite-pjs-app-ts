@@ -20,21 +20,22 @@ new p5((p5Instance) => {
   const p = p5Instance as unknown as p5;
   // ワールドの四角の数
   const WORLD_SIZE: { height: number; width: number } = {
-    height: 100,
-    width: 100,
+    height: 200,
+    width: 200,
   };
+  const smiratoinSpeed = 30;
   /*
    * directions :  0↑ 1→ 2↓ 3←
    * */
   let Position: PostionType[] = [
     {
-      x: 50,
-      y: 50,
+      x: Math.floor(WORLD_SIZE.width / 2),
+      y: Math.floor(WORLD_SIZE.height / 2),
       directions: 0,
     },
   ];
 
-  const SquereSize: number = 6;
+  const SquereSize: number = 2;
 
   let world: number[][] = generate2DArray2(
     WORLD_SIZE.width,
@@ -58,19 +59,20 @@ new p5((p5Instance) => {
 
   /** フレームごとの描画処理 */
   p.draw = () => {
-    Position = Position.map((pos) => {
-      // console.log(pos, world[pos.y][pos.x]);
-      if (world[pos.y][pos.x] === 1) {
-        // 黒
-        world[pos.y][pos.x] = 0;
-        return newPostion(pos, -1);
-      } else {
-        //白
-        world[pos.y][pos.x] = 1;
-        return newPostion(pos, 1);
-      }
-    });
-
+    for (let index = 0; index < smiratoinSpeed; index++) {
+      Position = Position.map((pos) => {
+        // console.log(pos, world[pos.y][pos.x]);
+        if (world[pos.y][pos.x] === 1) {
+          // 黒
+          world[pos.y][pos.x] = 0;
+          return newPostion(pos, -1);
+        } else {
+          //白
+          world[pos.y][pos.x] = 1;
+          return newPostion(pos, 1);
+        }
+      });
+    }
     world.map((value, h) => {
       value.map((state, w) => {
         p.fill(p.color(SquereColor(state)));
@@ -78,6 +80,7 @@ new p5((p5Instance) => {
         // p.fill(p.color(SquereColor(0)));
       });
     });
+
     // Position = Position.map((pos) => {
     //   console.log({ pos });
     //   return { x: pos.x + 1, y: pos.y, directions: pos.directions };
