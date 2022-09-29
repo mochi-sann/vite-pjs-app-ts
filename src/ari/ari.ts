@@ -11,6 +11,8 @@ const generate2DArray2 = (m: number, n: number, val = 0) => {
   return [...Array(m)].map((_) => Array(n).fill(val));
 };
 export type PostionType = { x: number; y: number; directions: number };
+export type WordlSizeType = { height: number; width: number };
+
 /**
  * ルール
  *  白いマスにアリがいた場合、90°右に方向転換し、そのマスの色を反転させ、1マス前進する。
@@ -19,11 +21,11 @@ export type PostionType = { x: number; y: number; directions: number };
 new p5((p5Instance) => {
   const p = p5Instance as unknown as p5;
   // ワールドの四角の数
-  const WORLD_SIZE: { height: number; width: number } = {
+  const WORLD_SIZE: WordlSizeType = {
     height: 200,
     width: 200,
   };
-  const smiratoinSpeed = 30;
+  const smiratoinSpeed = 500;
   /*
    * directions :  0↑ 1→ 2↓ 3←
    * */
@@ -54,7 +56,7 @@ new p5((p5Instance) => {
     //   world[pos.y][pos.x] = 2;
     // });
     p.noStroke();
-    p.background(220);
+    p.background(255);
   };
 
   /** フレームごとの描画処理 */
@@ -65,18 +67,22 @@ new p5((p5Instance) => {
         if (world[pos.y][pos.x] === 1) {
           // 黒
           world[pos.y][pos.x] = 0;
-          return newPostion(pos, -1);
+          return newPostion(pos, -1, WORLD_SIZE);
         } else {
           //白
           world[pos.y][pos.x] = 1;
-          return newPostion(pos, 1);
+          return newPostion(pos, 1, WORLD_SIZE);
         }
       });
     }
+    p.background(255);
     world.map((value, h) => {
       value.map((state, w) => {
-        p.fill(p.color(SquereColor(state)));
-        p.square(h * SquereSize, w * SquereSize, SquereSize);
+        const color = SquereColor(state);
+        if (color != "#ffffff") {
+          p.square(h * SquereSize, w * SquereSize, SquereSize);
+          p.fill(p.color(color));
+        }
         // p.fill(p.color(SquereColor(0)));
       });
     });

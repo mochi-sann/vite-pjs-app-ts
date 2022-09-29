@@ -1,3 +1,4 @@
+export type WordlSize = { height: number; width: number };
 /**
  * 新しい蟻のPositionを返す
  * @module newPostion
